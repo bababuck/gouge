@@ -1,169 +1,191 @@
-/*
- *	  Title:			Miniature lexer for C++ parser.
- *
- *	  File Name:		CxxLexer.l
- *
- *	  Author:			E.D.Willink
- *
- *	This is a complete lexer for C++, intended for use with CxxParser.y.
- *	All actions are done by macros, so that there is some chance that customisation
- *	can be performed within the bounds of the CxxLexing.hxx and CxxLexing.cxx
- *	include files.
- *END
- */
+%e  1019
+%p  2807
+%n  371
+%k  284
+%a  1213
+%o  1117
+
+O   [0-7]
+D   [0-9]
+NZ  [1-9]
+L   [a-zA-Z_]
+A   [a-zA-Z_0-9]
+H   [a-fA-F0-9]
+HP  (0[xX])
+E   ([Ee][+-]?{D}+)
+P   ([Pp][+-]?{D}+)
+FS  (f|F|l|L)
+IS  (((u|U)(l|L|ll|LL)?)|((l|L|ll|LL)(u|U)?))
+CP  (u|U|L)
+SP  (u8|u|U|L)
+ES  (\\(['"\?\\abfnrtv]|[0-7]{1,3}|x[a-fA-F0-9]+))
+WS  [ \t\v\n\f]
+
 %{
-#include <CxxLexing.hxx>
-using namespace std;
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include <stdio.h>
+#include "y.tab.h"
 
-int yylex();
-#ifdef __cplusplus
-}
-#endif
+extern void yyerror(const char *);  /* prints grammar violation message */
+
+extern int sym_type(const char *);  /* returns type from symbol table */
+
+#define sym_type(identifier) IDENTIFIER /* with no symbol table, fake it */
+
+static void comment(void);
+static int check_type(void);
 %}
-%a 5000
-%e 1500
-%n 1000
-%o 10000
-%p 10000
-ws								[ \f\v\t]
-
-digit							[0-9]
-hex								[0-9A-Fa-f]
-letter							[A-Z_a-z]
-simple_escape_sequence			(\\\'|\\\"|\\\?|\\\\|\\a|\\b|\\f|\\n|\\r|\\t|\\v)
-octal_escape_sequence			(\\[0-7]|\\[0-7][0-7]|\\[0-7][0-7][0-7])
-hexadecimal_escape_sequence		(\\x{hex}+)
-escape_sequence					({simple_escape_sequence}|{octal_escape_sequence}|{hexadecimal_escape_sequence})
-universal_character_name		(\\u{hex}{hex}{hex}{hex}|\\U{hex}{hex}{hex}{hex}{hex}{hex}{hex}{hex})
-non_digit						({letter}|{universal_character_name})
-identifier						({non_digit}({non_digit}|{digit})*)
-
-character_lit					(L?\'([^\'\\\n]|\\.)*)
-character_literal				({character_lit}\')
-
-string_lit						(L?\"([^\"\\\n]|\\.)*)
-string_literal					({string_lit}\")
-
-pp_number						(\.?{digit}({digit}|{non_digit}|[eE][-+]|\.)*)
-%%
-^.*\n							{ LEX_SAVE_LINE(yytext, yyleng); REJECT; }
-^{ws}*"#".*						{ /* Throw away preprocessor lines - hopefully only #line and equivalent. */ }
-
-{character_lit}\'				{ LEX_CHARACTER_TOKEN(yytext, yyleng-1); };
-{character_lit}\\				{ ERRMSG("End of line assumed to terminate character with trailing escape.");
-								  LEX_CHARACTER_TOKEN(yytext, yyleng-1); };
-{character_lit}					{ ERRMSG("End of line assumed to terminate character.");
-								  LEX_CHARACTER_TOKEN(yytext, yyleng); };
-
-{string_lit}\"					{ LEX_STRING_TOKEN(yytext, yyleng-1); };
-{string_lit}\\					{ ERRMSG("End of line assumed to terminate string with trailing escape.");
-								  LEX_STRING_TOKEN(yytext, yyleng-1); };
-{string_lit}					{ ERRMSG("End of line assumed to terminate string.");
-								  LEX_STRING_TOKEN(yytext, yyleng); };
-
-"asm"							{ LEX_STATIC_TOKEN(ASM); }
-"auto"							{ LEX_STATIC_TOKEN(AUTO); }
-"bool"							{ LEX_C_STATIC_TOKEN(BOOL); }
-"break"							{ LEX_STATIC_TOKEN(BREAK); }
-"case"							{ LEX_STATIC_TOKEN(CASE); }
-"catch"							{ LEX_C_STATIC_TOKEN(CATCH); }
-"char"							{ LEX_STATIC_TOKEN(CHAR); }
-"class"							{ LEX_C_STATIC_TOKEN(CLASS); }
-"const"							{ LEX_STATIC_TOKEN(CONST); }
-"const_cast"					{ LEX_C_STATIC_TOKEN(CONST_CAST); }
-"continue"						{ LEX_STATIC_TOKEN(CONTINUE); }
-"default"						{ LEX_STATIC_TOKEN(DEFAULT); }
-"delete"						{ LEX_C_STATIC_TOKEN(DELETE); }
-"do"							{ LEX_STATIC_TOKEN(DO); }
-"double"						{ LEX_STATIC_TOKEN(DOUBLE); }
-"dynamic_cast"					{ LEX_C_STATIC_TOKEN(DYNAMIC_CAST); }
-"else"							{ LEX_STATIC_TOKEN(ELSE); }
-"enum"							{ LEX_STATIC_TOKEN(ENUM); }
-"explicit"						{ LEX_C_STATIC_TOKEN(EXPLICIT); }
-"export"						{ LEX_C_STATIC_TOKEN(EXPORT); }
-"extern"						{ LEX_STATIC_TOKEN(EXTERN); }
-"false"							{ LEX_C_STATIC_TOKEN(FALSE); }
-"float"							{ LEX_STATIC_TOKEN(FLOAT); }
-"for"							{ LEX_STATIC_TOKEN(FOR); }
-"friend"						{ LEX_STATIC_TOKEN(FRIEND); }
-"goto"							{ LEX_STATIC_TOKEN(GOTO); }
-"if"							{ LEX_STATIC_TOKEN(IF); }
-"inline"						{ LEX_C_STATIC_TOKEN(INLINE); }
-"int"							{ LEX_STATIC_TOKEN(INT); }
-"long"							{ LEX_STATIC_TOKEN(LONG); }
-"mutable"						{ LEX_C_STATIC_TOKEN(MUTABLE); }
-"namespace"						{ LEX_C_STATIC_TOKEN(NAMESPACE); }
-"new"							{ LEX_C_STATIC_TOKEN(NEW); }
-"operator"						{ LEX_C_STATIC_TOKEN(OPERATOR); }
-"private"						{ LEX_C_STATIC_TOKEN(PRIVATE); }
-"protected"						{ LEX_C_STATIC_TOKEN(PROTECTED); }
-"public"						{ LEX_C_STATIC_TOKEN(PUBLIC); }
-"register"						{ LEX_STATIC_TOKEN(REGISTER); }
-"reinterpret_cast"				{ LEX_C_STATIC_TOKEN(REINTERPRET_CAST); }
-"return"						{ LEX_STATIC_TOKEN(RETURN); }
-"short"							{ LEX_STATIC_TOKEN(SHORT); }
-"signed"						{ LEX_C_STATIC_TOKEN(SIGNED); }
-"sizeof"						{ LEX_STATIC_TOKEN(SIZEOF); }
-"static"						{ LEX_STATIC_TOKEN(STATIC); }
-"static_cast"					{ LEX_C_STATIC_TOKEN(STATIC_CAST); }
-"struct"						{ LEX_STATIC_TOKEN(STRUCT); }
-"switch"						{ LEX_STATIC_TOKEN(SWITCH); }
-"template"						{ LEX_C_STATIC_TOKEN(TEMPLATE); }
-"this"							{ LEX_C_STATIC_TOKEN(THIS); }
-"throw"							{ LEX_C_STATIC_TOKEN(THROW); }
-"true"							{ LEX_C_STATIC_TOKEN(TRUE); }
-"try"							{ LEX_C_STATIC_TOKEN(TRY); }
-"typedef"						{ LEX_STATIC_TOKEN(TYPEDEF); }
-"typeid"						{ LEX_C_STATIC_TOKEN(TYPEID); }
-"typename"						{ LEX_C_STATIC_TOKEN(TYPENAME); }
-"union"							{ LEX_STATIC_TOKEN(UNION); }
-"unsigned"						{ LEX_STATIC_TOKEN(UNSIGNED); }
-"using"							{ LEX_C_STATIC_TOKEN(USING); }
-"virtual"						{ LEX_STATIC_TOKEN(VIRTUAL); }
-"void"							{ LEX_STATIC_TOKEN(VOID); }
-"volatile"						{ LEX_STATIC_TOKEN(VOLATILE); }
-"wchar_t"						{ LEX_C_STATIC_TOKEN(WCHAR_T); }
-"while"							{ LEX_STATIC_TOKEN(WHILE); }
-
-"::"							{ LEX_C_STATIC_TOKEN(SCOPE); }
-"..."							{ LEX_STATIC_TOKEN(ELLIPSIS); }
-"<<"							{ LEX_STATIC_TOKEN(SHL); }
-">>"							{ LEX_STATIC_TOKEN(SHR); }
-"=="							{ LEX_STATIC_TOKEN(EQ); }
-"!="							{ LEX_STATIC_TOKEN(NE); }
-"<="							{ LEX_STATIC_TOKEN(LE); }
-">="							{ LEX_STATIC_TOKEN(GE); }
-"&&"							{ LEX_STATIC_TOKEN(LOG_AND); }
-"||"							{ LEX_STATIC_TOKEN(LOG_OR); }
-"++"							{ LEX_STATIC_TOKEN(INC); }
-"--"							{ LEX_STATIC_TOKEN(DEC); }
-"->*"							{ LEX_STATIC_TOKEN(ARROW_STAR); }
-"->"							{ LEX_STATIC_TOKEN(ARROW); }
-".*"							{ LEX_STATIC_TOKEN(DOT_STAR); }
-"+="							{ LEX_STATIC_TOKEN(ASS_ADD); }
-"-="							{ LEX_STATIC_TOKEN(ASS_SUB); }
-"*="							{ LEX_STATIC_TOKEN(ASS_MUL); }
-"/="							{ LEX_STATIC_TOKEN(ASS_DIV); }
-"%="							{ LEX_STATIC_TOKEN(ASS_MOD); }
-"^="							{ LEX_STATIC_TOKEN(ASS_XOR); }
-"&="							{ LEX_STATIC_TOKEN(ASS_AND); }
-"|="							{ LEX_STATIC_TOKEN(ASS_OR); }
-">>="							{ LEX_STATIC_TOKEN(ASS_SHR); }
-"<<="							{ LEX_STATIC_TOKEN(ASS_SHL); }
-
-{pp_number}						{ LEX_NUMBER_TOKEN(yytext, yyleng); }
-
-{identifier}					{ LEX_IDENTIFIER_TOKEN(yytext, yyleng); }
-
-{escape_sequence}				|
-{universal_character_name}		{ LEX_ESCAPED_TOKEN(yytext, yyleng); }
-
-\n								|
-{ws}+							{ /* Throw away whitespace */ }
-.								{ LEX_ASCII_TOKEN(yytext[0]); }
 
 %%
-#include <CxxLexing.cxx>
+"/*"                                    { comment(); }
+"//".*                                    { /* consume //-comment */ }
+
+"auto"					{ return(AUTO); }
+"break"					{ return(BREAK); }
+"case"					{ return(CASE); }
+"char"					{ return(CHAR); }
+"const"					{ return(CONST); }
+"continue"				{ return(CONTINUE); }
+"default"				{ return(DEFAULT); }
+"do"					{ return(DO); }
+"double"				{ return(DOUBLE); }
+"else"					{ return(ELSE); }
+"enum"					{ return(ENUM); }
+"extern"				{ return(EXTERN); }
+"float"					{ return(FLOAT); }
+"for"					{ return(FOR); }
+"goto"					{ return(GOTO); }
+"if"					{ return(IF); }
+"inline"				{ return(INLINE); }
+"int"					{ return(INT); }
+"long"					{ return(LONG); }
+"register"				{ return(REGISTER); }
+"restrict"				{ return(RESTRICT); }
+"return"				{ return(RETURN); }
+"short"					{ return(SHORT); }
+"signed"				{ return(SIGNED); }
+"sizeof"				{ return(SIZEOF); }
+"static"				{ return(STATIC); }
+"struct"				{ return(STRUCT); }
+"switch"				{ return(SWITCH); }
+"typedef"				{ return(TYPEDEF); }
+"union"					{ return(UNION); }
+"unsigned"				{ return(UNSIGNED); }
+"void"					{ return(VOID); }
+"volatile"				{ return(VOLATILE); }
+"while"					{ return(WHILE); }
+"_Alignas"                              { return ALIGNAS; }
+"_Alignof"                              { return ALIGNOF; }
+"_Atomic"                               { return ATOMIC; }
+"_Bool"                                 { return BOOL; }
+"_Complex"                              { return COMPLEX; }
+"_Generic"                              { return GENERIC; }
+"_Imaginary"                            { return IMAGINARY; }
+"_Noreturn"                             { return NORETURN; }
+"_Static_assert"                        { return STATIC_ASSERT; }
+"_Thread_local"                         { return THREAD_LOCAL; }
+"__func__"                              { return FUNC_NAME; }
+
+{L}{A}*					{ return check_type(); }
+
+{HP}{H}+{IS}?				{ return I_CONSTANT; }
+{NZ}{D}*{IS}?				{ return I_CONSTANT; }
+"0"{O}*{IS}?				{ return I_CONSTANT; }
+{CP}?"'"([^'\\\n]|{ES})+"'"		{ return I_CONSTANT; }
+
+{D}+{E}{FS}?				{ return F_CONSTANT; }
+{D}*"."{D}+{E}?{FS}?			{ return F_CONSTANT; }
+{D}+"."{E}?{FS}?			{ return F_CONSTANT; }
+{HP}{H}+{P}{FS}?			{ return F_CONSTANT; }
+{HP}{H}*"."{H}+{P}{FS}?			{ return F_CONSTANT; }
+{HP}{H}+"."{P}{FS}?			{ return F_CONSTANT; }
+
+({SP}?\"([^"\\\n]|{ES})*\"{WS}*)+	{ return STRING_LITERAL; }
+
+"..."					{ return ELLIPSIS; }
+">>="					{ return RIGHT_ASSIGN; }
+"<<="					{ return LEFT_ASSIGN; }
+"+="					{ return ADD_ASSIGN; }
+"-="					{ return SUB_ASSIGN; }
+"*="					{ return MUL_ASSIGN; }
+"/="					{ return DIV_ASSIGN; }
+"%="					{ return MOD_ASSIGN; }
+"&="					{ return AND_ASSIGN; }
+"^="					{ return XOR_ASSIGN; }
+"|="					{ return OR_ASSIGN; }
+">>"					{ return RIGHT_OP; }
+"<<"					{ return LEFT_OP; }
+"++"					{ return INC_OP; }
+"--"					{ return DEC_OP; }
+"->"					{ return PTR_OP; }
+"&&"					{ return AND_OP; }
+"||"					{ return OR_OP; }
+"<="					{ return LE_OP; }
+">="					{ return GE_OP; }
+"=="					{ return EQ_OP; }
+"!="					{ return NE_OP; }
+";"					{ return ';'; }
+("{"|"<%")				{ return '{'; }
+("}"|"%>")				{ return '}'; }
+","					{ return ','; }
+":"					{ return ':'; }
+"="					{ return '='; }
+"("					{ return '('; }
+")"					{ return ')'; }
+("["|"<:")				{ return '['; }
+("]"|":>")				{ return ']'; }
+"."					{ return '.'; }
+"&"					{ return '&'; }
+"!"					{ return '!'; }
+"~"					{ return '~'; }
+"-"					{ return '-'; }
+"+"					{ return '+'; }
+"*"					{ return '*'; }
+"/"					{ return '/'; }
+"%"					{ return '%'; }
+"<"					{ return '<'; }
+">"					{ return '>'; }
+"^"					{ return '^'; }
+"|"					{ return '|'; }
+"?"					{ return '?'; }
+
+{WS}+					{ /* whitespace separates tokens */ }
+.					{ /* discard bad characters */ }
+
+%%
+
+int yywrap(void)        /* called at end of input */
+{
+    return 1;           /* terminate now */
+}
+
+static void comment(void)
+{
+    int c;
+
+    while ((c = input()) != 0)
+        if (c == '*')
+        {
+            while ((c = input()) == '*')
+                ;
+
+            if (c == '/')
+                return;
+
+            if (c == 0)
+                break;
+        }
+    yyerror("unterminated comment");
+}
+
+static int check_type(void)
+{
+    switch (sym_type(yytext))
+    {
+    case TYPEDEF_NAME:                /* previously defined */
+        return TYPEDEF_NAME;
+    case ENUMERATION_CONSTANT:        /* previously defined */
+        return ENUMERATION_CONSTANT;
+    default:                          /* includes undefined */
+        return IDENTIFIER;
+    }
+}
