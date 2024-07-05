@@ -1,0 +1,11 @@
+#ifndef DECLARATION_H
+#define DECLARATION_H
+
+typedef struct {
+    char *type;
+    char *name;
+} declaration_t;
+
+declaration_t* make_declaration(const char *type, const char *name);
+
+#endif

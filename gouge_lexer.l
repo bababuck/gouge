@@ -4,6 +4,7 @@ WS  [ \t\v\n\f]
 
 %{
 #include <stdio.h>
+#include "declaration.h"
 #include "y.tab.h"
 %}
 
@@ -17,7 +18,7 @@ WS  [ \t\v\n\f]
 "{"                          { return '{'; }
 "}"                          { return '}'; }
 
-{L}{A}*                      { return SYMBOL; }
+{L}{A}*                      { yylval.str=strdup(yytext); return SYMBOL; }
 
 
 {WS}+                        { /* whitespace separates tokens */ }
