@@ -13,24 +13,24 @@ void yyerror(const char *s);
 
 %type <declaration> declaration
 %type <str> SYMBOL
-%type <expression> expression
-%type <expressions> expressions
+%type <equation> equation
+%type <equations> equations
 
 %union {
     declaration_t *declaration;
     char *str;
-    expression_t *expression;
-    expression_t **expressions;
+    equation_t *equation;
+    equation_t **equations;
 }
 %%
 
 function
-    : declaration SYMBOL '(' function_declaration_inputs ')' '{' expressions '}' {
-        function_t *function = new_function($2, $1, $4);
+    : declaration SYMBOL '(' function_declaration_inputs ')' '{' equations '}' {
+        void *function = new_function($2, $1, $4);
         free($2);
         free($1);
         free($4);
-        evaluate_function_expressions(function, $7);
+        evaluate_function_equation(function, $7);
         printf("FUNCTION\n");
     }
     ;
@@ -43,13 +43,13 @@ function_declaration_inputs
 declaration
     : SYMBOL SYMBOL { $$ = new_wire($1, $2); }
 
-expressions
-    : expression { $$ = make_expressions(1, &($1)); }
-    | expressions expression { $$ = add_expression($1, $2); }
+equations
+    : equation { $$ = add_equation(1, &($1)); }
+    | equations equation { $$ = add_equation($1, $2); }
     ;
 
-expression
-    : SYMBOL ASSIGN SYMBOL ';' { $$ = make_expression($1, '=', $3); }
+equation
+    : SYMBOL ASSIGN SYMBOL ';' { $$ = make_equation($1, '=', $3); }
     ;
 
 

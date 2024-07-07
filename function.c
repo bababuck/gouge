@@ -2,11 +2,12 @@
 #include "object.h"
 #include "function.h"
 
-function_t* new_function(char *name, wires_t *outputs, wires_t *inputs) {
-  return function = new function_t(name, outputs, inputs);
+void* new_function(char *name, void **outputs, void **inputs) {
+  function_t *function = new function_t(name, (wires_t**) outputs, (wires_t**) inputs);
+  return (void*) function;
 }
 
-void evaluate_function_expressions(function_t *function, expressions_t *expressions) {
+void evaluate_function_equations(void *function, void *equations) {
 
 }
 
@@ -45,16 +46,29 @@ class function_t : public object_t {
   bool inline;
 }
 
-add_expressions
+void* add_equation(void *old_equations, void *equation) {
+  std::vector<equation_t*> *equations = (std::vector<equation_t*>*) old_equations;
+  if (!equations) {
+    equations = new std::vector<equation_t*>();
+  }
+  equations.emplace_back(equation);
+  return (void*) equations;
+}
 
-make_expression
+void* make_equation(char *lhs_wire, char op, char *rhs_wire) {
+  operator_t *operator = new operator_t(lhs_wire);
+  equation_t *rhs_equation = new equation_t(nullptr, get_wire(rhs_wire), nullptr);
+  equation_t *lhs_equation = new equation_t(rhs_equation, get_wire(lhs_wire), operator);
+  return (void*) lhs_equation;
+}
+
 
 // flyweight
 class operator_t {
 private:
-  std::string operator;
+  char operator;
 public:
-  operator_t(std::string _operator): operator(_operator){};
+  operator_t(char _operator): operator(_operator){};
   std::string connect(std::string lhs, std::string rhs); // recursively printout equation
 }
 
@@ -65,7 +79,7 @@ class equation_t: public object_t {
 private:
   equation_t *next;
   wire_t *wire;
-  operator_t operator;
+  operator_t *operator;
 public:
-  equation_t():{}
+  equation_t(equation_t *_next, wire_t *_wire, operator_t *_operator): next(_next), wire(_wire), operator(_operator){}
 }

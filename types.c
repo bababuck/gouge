@@ -3,7 +3,8 @@ typedef struct {
   wire_t **wires;
 } wires_t;
 
-wires_t add_wires(wires_t *wires, wire_t *wire) {
+void* add_wires(void_t *old_wires, void_t *wire) {
+  wires_t *wires = (wires_t*) old_wires;
   if (!wires) {
     wires = new wires_t();
     wires->count = 0;
@@ -11,12 +12,13 @@ wires_t add_wires(wires_t *wires, wire_t *wire) {
   }
   ++(wires->count);
   wires = realloc(wires, wires->count * sizeof(wire_t*));
-  wires->wires[wires->count] = wire;
-  return wires;
+  wires->wires[wires->count] = (wires_t*) wire;
+  return (void*) wires;
 }
 
-wire_t* new_wire(char *type, char *name) {
-  return new wire_t(name, 1);  // TODO: Extract bit width
+void* new_wire(char *type, char *name) {
+  wire_t *wire = new wire_t(name, 1);  // TODO: Extract bit width
+  return (void*) wire;
 }
 
 class logic_t : object_t {
