@@ -1,6 +1,6 @@
 NAME := gouge
 
-cpp_files: exception types object function
+cpp_files := exceptions types object function
 
 all: ${NAME}.exe
 
@@ -15,3 +15,13 @@ y.tab.c y.tab.h: ${NAME}_parser.y
 
 clean:
 	rm lex.yy.c ${NAME}.exe y.tab.c y.tab.h
+
+test_files := exceptions
+
+add_suffix = $(foreach element,$(1),$(element).$2)
+
+test_headers := $(call add_suffix,$(test_files),hpp)
+test_cpp := $(call add_suffix,$(test_files),cpp)
+
+test:
+	g++ -std=c++11 -c -o test.o $(test_cpp)
