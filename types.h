@@ -46,7 +46,7 @@ class register_t : public wire_t {
 /**
  * @brief Represents a constant in the logic system.
  *
- * @TODO: make this a flyweight class
+ * @todo: make this a flyweight class
  */
 class constant_t : public logic_t {
 public:
