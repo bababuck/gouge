@@ -1,6 +1,6 @@
 #include <vector>
 
-#include "types.h"
+#include "types.hpp"
 
 /**
  * @brief Adds a wire object to a vector of wires.
@@ -14,11 +14,11 @@
  */
  void* add_wires(void *old_wires, void *wire) {
   std::vector<wire_t*> *wires = (std::vector<wire_t*>*) old_wires;
-  if (!equations) {
+  if (!wires) {
     wires = new std::vector<wire_t*>();
   }
-  equations.emplace_back(wire);
-  return (void*) wiress;
+  wires->emplace_back((wire_t*) wire);
+  return (void*) wires;
 }
 
 /**
@@ -46,18 +46,19 @@ void* new_wire(char *type, char *name) {
  * @param _bit_width The bit width of the logic_t object.
  * @todo: Check to make sure _bit_width < 64 (since we don't handle wider constants).
  */
-logic_t::logic_t(char *name, width_t _bit_width): object_t(name_t), bit_width(_bit_width) {}
+logic_t::logic_t(char *name, width_t _bit_width): object_t(name_t(name)), bit_width(_bit_width) {}
 
 
-virtual void logic_t::add_driver() {}
+void logic_t::add_driver() {}
 
-wire_t::~wire_t() override {}
-virtual void wire_t::add_driver() {}
+wire_t::wire_t(char *name, width_t _bit_width):logic_t(name, _bit_width){}
+wire_t::~wire_t(){}
+void wire_t::add_driver() {}
 void wire_t::validate() const {}
-virtual void wire_t::increment_cycle() const {}
+void wire_t::increment_cycle() const {}
 void wire_t::check_multiple_drivers() const {}
 
-virtual void register_t::increment_cycle() const {}
+void reg_t::increment_cycle() const {}
 
-constant_t::~constant_t() override {}
-virtual void constant_t::add_driver() const override {} // throw exeption
+constant_t::~constant_t() {}
+void constant_t::add_driver() {} // throw exeption

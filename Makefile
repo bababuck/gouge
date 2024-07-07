@@ -16,7 +16,7 @@ y.tab.c y.tab.h: ${NAME}_parser.y
 clean:
 	rm lex.yy.c ${NAME}.exe y.tab.c y.tab.h
 
-test_files := object
+test_files := types
 
 add_suffix = $(foreach element,$(1),$(element).$2)
 

@@ -1,7 +1,11 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-#include "object.h"
+#include <string>
+
+#include "object.hpp"
+
+typedef size_t width_t;
 
 void* add_wires(void *old_wires, void *wire);
 
@@ -12,36 +16,36 @@ void* new_wire(char *type, char *name);
  */
 class logic_t : object_t {
 private:
-    wire_t **recievers;
+    logic_t **recievers;
     width_t bit_width;
 public:
     logic_t(char *name, width_t _bit_width);
     virtual void add_driver();
-}
+};
 
 /**
  * @brief Represents a wire in the logic system.
  */
 class wire_t : public logic_t {
 private:
-    driver_t **drivers;
-    function_t **driver_function;
+    logic_t **drivers;
 public:
+    wire_t(char *name, width_t _bit_width);
     virtual ~wire_t() override;
 private:
-    virtual void validate() const override; // Check to make sure all drivers are compatible
-    void check_multiple_drivers() const;
     virtual void validate() const; // Check to make sure all drivers are compatible
+    void check_multiple_drivers() const;
     virtual void increment_cycle() const; // Does nothing except for register type
-    virtual void add_driver();
-}
+    virtual void add_driver() override;
+};
 
 /**
  * @brief Represents a register in the logic system.
  */
-class register_t : public wire_t {
+class reg_t : public wire_t {
+public:
     virtual void increment_cycle() const; // Print out always block
-}
+};
 
 /**
  * @brief Represents a constant in the logic system.
@@ -50,8 +54,8 @@ class register_t : public wire_t {
  */
 class constant_t : public logic_t {
 public:
-    virtual ~wire_t() override;
-    virtual void add_driver() const override;
-}
+    virtual ~constant_t() override;
+    virtual void add_driver() override;
+};
 
 #endif
