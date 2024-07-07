@@ -7,14 +7,18 @@
 
 typedef size_t width_t;
 
+class wire_t;
+
 void* add_wires(void *old_wires, void *wire);
 
 void* new_wire(char *type, char *name);
 
+wire_t* get_wire(char* name);
+
 /**
  * @brief Represents a logic entity with drivers and receivers.
  */
-class logic_t : object_t {
+class logic_t : public object_t {
 private:
     logic_t **recievers;
     width_t bit_width;

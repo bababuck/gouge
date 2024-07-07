@@ -1,6 +1,10 @@
 #include "exceptions.hpp"
 #include "object.hpp"
 
+object_t* get_object(char *name) {
+    return objects_db_t::get_objects_db()->lookup_object(name_t(name));
+}
+
 /**
  * @brief Private constructor to enforce singleton pattern.
  *

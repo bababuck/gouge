@@ -1,9 +1,13 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
+#include <string>
+
 typedef std::string name_t;
 
 class object_t;
+
+object_t* get_object(char* name);
 
 /**
  * @brief Singleton class using the Registry design pattern to manage a database of objects.
@@ -36,9 +40,9 @@ public:
  */
 class object_t {
 public:
-    object_t(name_t _name);
-private:
     name_t name;
+public:
+    object_t(name_t _name);
 protected:
     virtual ~object_t() = 0;
 };

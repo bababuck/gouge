@@ -14,8 +14,8 @@
  * 
  * @return Pointer to the created function object (function_t* case to void*).
  */
-void* new_function(char *name, void **outputs, void **inputs) {
-  function_t *function = new function_t(name, (wires_t**) outputs, (wires_t**) inputs);
+void* new_function(char *name, void *outputs, void *inputs) {
+  function_t *function = new function_t(name, (std::vector<wire_t*>*) outputs, (std::vector<wire_t*>*) inputs);
   return (void*) function;
 }
 
@@ -36,7 +36,7 @@ void evaluate_function_equations(void *function, void *equations) {
  * @note This method adds a wire object to the collection. 
  * It associates the wire with its name in the internal map.
  */
-wire_collection_t::void add(wire_t *wire) {
+void wire_collection_t::add(wire_t *wire) {
     wires[wire->name] = wire;
 }
 
@@ -50,12 +50,12 @@ wire_collection_t::void add(wire_t *wire) {
  * Constructs a function object with given name, and adds the specified
  * output and input wires to respective collections.
  */
-function_t::function_t(name_t _name, wires_t *outputs, wires_t *inputs) : name(_name) {
-    for (size_t i=0; i<outputs->count; ++ i) {
-        outputs.add(outputs->wires[i]);
+function_t::function_t(name_t _name, std::vector<wire_t*>* _outputs, std::vector<wire_t*>* _inputs) : object_t(_name) {
+    for (auto wire : *_outputs) {
+        outputs.add(wire);
     }
-    for (size_t i=0; i<inputs->count; ++ i) {
-        inputs.add(inputs->wires[i]);
+    for (auto wire : *_inputs) {
+        inputs.add(wire);
     }
 }
 
@@ -84,7 +84,7 @@ void* add_equation(void *old_equations, void *equation) {
   if (!equations) {
     equations = new std::vector<equation_t*>();
   }
-  equations.emplace_back(equation);
+  equations->emplace_back((equation_t*) equation);
   return (void*) equations;
 }
 
@@ -103,10 +103,10 @@ void* add_equation(void *old_equations, void *equation) {
  * 
  * @note The returned equation represents lhs_wire op rhs_wire.
  */
-void* make_equation(char *lhs_wire, char op, char *rhs_wire) {
-  operator_t *operator = new operator_t(lhs_wire);
+void* make_equation(char *lhs_wire, char _op, char *rhs_wire) {
+  operator_t *op = new operator_t(_op);
   equation_t *rhs_equation = new equation_t(nullptr, get_wire(rhs_wire), nullptr);
-  equation_t *lhs_equation = new equation_t(rhs_equation, get_wire(lhs_wire), operator);
+  equation_t *lhs_equation = new equation_t(rhs_equation, get_wire(lhs_wire), op);
   return (void*) lhs_equation;
 }
 
@@ -118,18 +118,12 @@ void* make_equation(char *lhs_wire, char op, char *rhs_wire) {
  * 
  * Initializes the operator with the given character.
  */
-operator_t::operator_t(char _operator): operator(_operator) {}
+operator_t::operator_t(char _op): op(_op) {}
 
-std::string operator_t::connect(std::string lhs, std::string rhs) {
-    return "";
-}
-
-// Linked list
-class equation_t: public object_t {
-private:
-  equation_t *next;
-  wire_t *wire;
-  operator_t *operator;
-public:
-  equation_t(equation_t *_next, wire_t *_wire, operator_t *_operator): next(_next), wire(_wire), operator(_operator){}
-}
+/**
+  * @brief Constructor to initialize an equation node.
+  * @param _next Pointer to the next equation node.
+  * @param _wire Pointer to the wire associated with this equation.
+  * @param _op Pointer to the operator associated with this equation.
+  */
+equation_t::equation_t(equation_t *_next, wire_t *_wire, operator_t *_op): next(_next), wire(_wire), op(_op){}

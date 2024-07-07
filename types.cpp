@@ -1,6 +1,17 @@
 #include <vector>
 
+#include "exceptions.hpp"
+#include "object.hpp"
 #include "types.hpp"
+
+wire_t* get_wire(char *name) {
+    object_t *object = get_object(name);
+    wire_t *wire = dynamic_cast<wire_t*>(object);
+    if (wire) {
+        return wire;
+    }
+    throw multiple_missing_def_exception_t(std::string(name) + " is not a wire");
+}
 
 /**
  * @brief Adds a wire object to a vector of wires.
