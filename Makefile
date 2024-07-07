@@ -1,5 +1,7 @@
 NAME := gouge
 
+cpp_files: exception types object function
+
 all: ${NAME}.exe
 
 ${NAME}.exe: y.tab.c y.tab.h lex.yy.c declaration.c declaration.h
