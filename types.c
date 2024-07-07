@@ -1,54 +1,63 @@
-typedef struct {
-  size_t count;
-  wire_t **wires;
-} wires_t;
+#include <vector>
 
-void* add_wires(void_t *old_wires, void_t *wire) {
-  wires_t *wires = (wires_t*) old_wires;
-  if (!wires) {
-    wires = new wires_t();
-    wires->count = 0;
-    wires->wires = NULL;
+#include "types.h"
+
+/**
+ * @brief Adds a wire object to a vector of wires.
+ * 
+ * This function adds a wire object to a vector of wires.
+ * If the vector (`old_wires`) provided is null, a new vector is created.
+ * 
+ * @param old_wires Pointer to the vector of wire_t pointers.
+ * @param wire Pointer to the wire_t object to add.
+ * @return Pointer to the updated vector of wire_t pointers.
+ */
+ void* add_wires(void *old_wires, void *wire) {
+  std::vector<wire_t*> *wires = (std::vector<wire_t*>*) old_wires;
+  if (!equations) {
+    wires = new std::vector<wire_t*>();
   }
-  ++(wires->count);
-  wires = realloc(wires, wires->count * sizeof(wire_t*));
-  wires->wires[wires->count] = (wires_t*) wire;
-  return (void*) wires;
+  equations.emplace_back(wire);
+  return (void*) wiress;
 }
 
+/**
+ * @brief Creates a new wire object.
+ * 
+ * This function creates a new wire object with the specified type and name.
+ *
+ * @TODO: Extract bit width
+ *
+ * @param type The type of the wire (char pointer).
+ * @param name The name of the wire (char pointer).
+ * @return Pointer to the newly created wire_t object.
+ */
 void* new_wire(char *type, char *name) {
-  wire_t *wire = new wire_t(name, 1);  // TODO: Extract bit width
+  wire_t *wire = new wire_t(name, 1);
   return (void*) wire;
 }
 
-class logic_t : object_t {
-private:
-  wire_t **recievers;
-  width_t bit_width;
-public:
- logic_t(char *name, width_t _bit_width): object_t(name_t), bit_width(_bit_width) {} // TODO: check to make sure width < 64 (since we don't want to handle wider constants)
-  virtual void add_driver();
-  virtual void validate() const; // Check to make sure all drivers are compatible
-  virtual void increment_cycle() const; // Does nothing except for register type
-}
+/**
+ * @brief Constructor for logic_t objects.
+ * 
+ * Initializes a logic_t object with a specified name and bit width.
+ * 
+ * @param name The name of the logic_t object.
+ * @param _bit_width The bit width of the logic_t object.
+ * @note TODO: Check to make sure _bit_width < 64 (since we don't handle wider constants).
+ */
+logic_t::logic_t(char *name, width_t _bit_width): object_t(name_t), bit_width(_bit_width) {}
 
-class wire_t : public logic_t {
-private:
-  driver_t **drivers;
-  function_t **driver_function;
-private:
-  virtual void validate() const override; // Check to make sure all drivers are compatible
-  void check_multiple_drivers() const;
-}
 
-class register_t : public register_t {
-  virtual void increment_cycle() const; // Print out always block
-}
+virtual void logic_t::add_driver() {}
 
-// flyweight class???
-class constant_t : public logic_t {
-private:
-public:
-  virtual void add_driver() const override; // FAILS
-  virtual void validate() const override; // always valid
-}
+wire_t::~wire_t() override {}
+virtual void wire_t::add_driver() {}
+void wire_t::validate() const {}
+virtual void wire_t::increment_cycle() const {}
+void wire_t::check_multiple_drivers() const {}
+
+virtual void register_t::increment_cycle() const {}
+
+constant_t::~constant_t() override {}
+virtual void constant_t::add_driver() const override {} // throw exeption

@@ -37,6 +37,8 @@ public:
     object_t(name_t _name) : name(_name);
 private:
     name_t name;
+protected:
+    virtual ~object_t() = 0;
 };
 
 #endif
