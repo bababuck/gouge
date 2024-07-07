@@ -6,6 +6,7 @@
 
 #include "exceptions.hpp"
 #include "object.hpp"
+#include "types.h"
 #include "types.hpp"
 
 wire_t* get_wire(char *name) {

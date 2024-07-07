@@ -2,6 +2,7 @@
  * @file  function.cpp
  */
 
+#include "function.h"
 #include "function.hpp"
 #include "object.hpp"
 

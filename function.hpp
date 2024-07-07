@@ -41,11 +41,6 @@ class function_t : public object_t {
   std::string evaluate() const;
 };
 
-
-void* add_equation(void *old_equations, void *equation);
-
-void* make_equation(char *lhs_wire, char op, char *rhs_wire);
-
 /**
  * @brief Represents an operator object for equations.
  * 
