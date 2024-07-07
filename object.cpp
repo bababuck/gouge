@@ -1,5 +1,5 @@
-#include "exceptions.h"
-#include "objects.h"
+#include "exceptions.hpp"
+#include "object.hpp"
 
 /**
  * @brief Private constructor to enforce singleton pattern.
@@ -7,7 +7,9 @@
  * The constructor is private to prevent direct instantiation of `objects_db_t`.
  * Use `get_objects_db()` to obtain the singleton instance.
  */
-objects_db_t::objects_db_t();
+objects_db_t::objects_db_t() {}
+
+objects_db_t* objects_db_t::self = nullptr;
 
 /**
  * @brief Registers an object with a specified name in the database.
@@ -18,11 +20,11 @@ objects_db_t::objects_db_t();
  * @param name The name under which to register the object.
  * @param obj Pointer to the object to be registered.
  */
-void objects_db_t::register_object(const name_t &name, const object_t* const obj) {
+void objects_db_t::register_object(const name_t &name, object_t* const obj) {
     if (objects.find(name) != objects.end()) {
-        throw multiple_missing_definition_t(name + "already defined");
+        throw multiple_missing_def_exception_t(name + "already defined");
     }
-    registry[name] = obj;
+    objects[name] = obj;
 }
 
 /**
@@ -34,11 +36,11 @@ void objects_db_t::register_object(const name_t &name, const object_t* const obj
  * @return Pointer to the object if found, nullptr otherwise.
  */
 object_t* objects_db_t::lookup_object(const name_t &name) const {
-    auto it = registryMap.find(name);
-    if (it != registryMap.end()) {
+    auto it = objects.find(name);
+    if (it != objects.end()) {
         return it->second;
     }
-    throw multiple_missing_definition_t(name + "not yet defined");
+    throw multiple_missing_def_exception_t(name + "not yet defined");
 }
 
 /**
@@ -48,7 +50,7 @@ object_t* objects_db_t::lookup_object(const name_t &name) const {
  *
  * @return Pointer to the singleton instance of `objects_db_t`.
  */
-static objects_db_t* objects_db_t::get_objects_db(){
+objects_db_t* objects_db_t::get_objects_db() {
     if (self == nullptr){
         self = new objects_db_t();
     }

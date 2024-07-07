@@ -3,6 +3,8 @@
 
 typedef std::string name_t;
 
+class object_t;
+
 /**
  * @brief Singleton class using the Registry design pattern to manage a database of objects.
  *
@@ -15,12 +17,12 @@ typedef std::string name_t;
  */
 class objects_db_t {
 private:
-    std::unordered_map<name_t, object_t*> registry;
-    static objects_db_t *self = nullptr;
+    std::unordered_map<name_t, object_t*> objects;
+    static objects_db_t *self;
 
     objects_db_t();
 public:
-    void register_object(const name_t &name, const object_t* const obj);
+    void register_object(const name_t &name, object_t* const obj);
     object_t* lookup_object(const name_t &name) const;
     static objects_db_t* get_objects_db();
 };
@@ -34,7 +36,7 @@ public:
  */
 class object_t {
 public:
-    object_t(name_t _name) : name(_name);
+    object_t(name_t _name);
 private:
     name_t name;
 protected:

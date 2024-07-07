@@ -1,6 +1,5 @@
-#include "declaration.h"
-#include "object.h"
-#include "function.h"
+#include "object.hpp"
+#include "function.hpp"
 
 /**
  * @brief Creates a new function object.
