@@ -1,5 +1,9 @@
-#ifndef EXCEPTIONS_H
-#define EXCEPTIONS_H
+/**
+ * @file  exceptions.hpp
+ */
+
+#ifndef EXCEPTIONS_HPP
+#define EXCEPTIONS_HPP
 
 #include <exception>
 #include <string>

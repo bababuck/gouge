@@ -1,3 +1,7 @@
+/**
+ * @file  exceptions.cpp
+ */
+
 #include "exceptions.hpp"
 
 /**

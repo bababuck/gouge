@@ -1,3 +1,7 @@
+/**
+ * @file  object.cpp
+ */
+
 #include "exceptions.hpp"
 #include "object.hpp"
 

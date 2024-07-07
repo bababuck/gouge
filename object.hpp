@@ -1,5 +1,9 @@
-#ifndef OBJECT_H
-#define OBJECT_H
+/**
+ * @file  object.hpp
+ */
+
+#ifndef OBJECT_HPP
+#define OBJECT_HPP
 
 #include <string>
 
