@@ -1,5 +1,9 @@
-#include "object.hpp"
+/**
+ * @file  function.cpp
+ */
+
 #include "function.hpp"
+#include "object.hpp"
 
 /**
  * @brief Creates a new function object.

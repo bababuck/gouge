@@ -1,3 +1,7 @@
+/**
+ * @file  types.cpp
+ */
+
 #include <vector>
 
 #include "exceptions.hpp"

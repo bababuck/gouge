@@ -1,6 +1,9 @@
 /**
- * @file  function.cpp
+ * @file  function.hpp
  */
+
+#ifndef FUNCTION_HPP
+#define FUNCTION_HPP
 
 #include <string>
 #include <vector>
@@ -74,3 +77,5 @@ private:
 public:
   equation_t(equation_t *_next, wire_t *_wire, operator_t *_op);
 };
+
+#endif

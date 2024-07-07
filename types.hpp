@@ -1,5 +1,9 @@
-#ifndef TYPES_H
-#define TYPES_H
+/**
+ * @file  types.hpp
+ */
+
+#ifndef TYPES_HPP
+#define TYPES_HPP
 
 #include <string>
 
