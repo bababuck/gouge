@@ -18,6 +18,8 @@ wire_t* get_wire(char *name) {
     throw multiple_missing_def_exception_t(std::string(name) + " is not a wire");
 }
 
+extern "C"
+{
 /**
  * @brief Adds a wire object to a vector of wires.
  *
@@ -53,6 +55,8 @@ void* new_wire(char *type, char *name) {
   return (void*) wire;
 }
 
+}
+
 /**
  * @brief Constructor for logic_t objects.
  *
@@ -64,11 +68,11 @@ void* new_wire(char *type, char *name) {
  */
 logic_t::logic_t(char *name, width_t _bit_width): object_t(name_t(name)), bit_width(_bit_width) {}
 
+logic_t::~logic_t(){}
 
 void logic_t::add_driver() {}
 
 wire_t::wire_t(char *name, width_t _bit_width):logic_t(name, _bit_width){}
-wire_t::~wire_t(){}
 void wire_t::add_driver() {}
 void wire_t::validate() const {}
 void wire_t::increment_cycle() const {}
@@ -76,5 +80,4 @@ void wire_t::check_multiple_drivers() const {}
 
 void reg_t::increment_cycle() const {}
 
-constant_t::~constant_t() {}
 void constant_t::add_driver() {} // throw exeption

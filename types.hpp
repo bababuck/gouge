@@ -25,6 +25,8 @@ private:
 public:
     logic_t(char *name, width_t _bit_width);
     virtual void add_driver();
+protected:
+    virtual ~logic_t() = 0;
 };
 
 /**
@@ -35,7 +37,6 @@ private:
     logic_t **drivers;
 public:
     wire_t(char *name, width_t _bit_width);
-    virtual ~wire_t() override;
 private:
     virtual void validate() const; // Check to make sure all drivers are compatible
     void check_multiple_drivers() const;
@@ -58,7 +59,6 @@ public:
  */
 class constant_t : public logic_t {
 public:
-    virtual ~constant_t() override;
     virtual void add_driver() override;
 };
 

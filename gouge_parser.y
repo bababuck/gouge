@@ -1,6 +1,7 @@
 %{
 #include<stdio.h>
-#include "declaration.h"
+#include "types.h"
+#include "function.h"
 
 int yylex(void);
 void yyerror(const char *s);
@@ -11,16 +12,20 @@ void yyerror(const char *s);
 
 %start function
 
-%type <declaration> declaration
+%type <wire> declaration
 %type <str> SYMBOL
 %type <equation> equation
 %type <equations> equations
+%type <wires> function_declaration_inputs
+%type <function> function
 
 %union {
-    declaration_t *declaration;
+    void *wire;
     char *str;
-    equation_t *equation;
-    equation_t **equations;
+    void *equation;
+    void *equations;
+    void *wires;
+    void *function;
 }
 %%
 
@@ -30,7 +35,8 @@ function
         free($2);
         free($1);
         free($4);
-        evaluate_function_equation(function, $7);
+        evaluate_function_equations(function, $7);
+        $$ = function;
         printf("FUNCTION\n");
     }
     ;
@@ -44,7 +50,7 @@ declaration
     : SYMBOL SYMBOL { $$ = new_wire($1, $2); }
 
 equations
-    : equation { $$ = add_equation(1, &($1)); }
+    : equation { $$ = add_equation(NULL, &($1)); }
     | equations equation { $$ = add_equation($1, $2); }
     ;
 

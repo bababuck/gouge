@@ -71,3 +71,5 @@ objects_db_t* objects_db_t::get_objects_db() {
  * @param _name The name to be associated with the object.
  */
 object_t::object_t(name_t _name) : name(_name) {}
+
+object_t::~object_t() {}

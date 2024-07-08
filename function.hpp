@@ -39,6 +39,7 @@ class function_t : public object_t {
  public:
   function_t(name_t _name, std::vector<wire_t*> *_outputs, std::vector<wire_t*> *_inputs);
   std::string evaluate() const;
+  virtual ~function_t() override;
 };
 
 /**

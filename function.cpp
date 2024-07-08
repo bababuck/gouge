@@ -6,6 +6,8 @@
 #include "function.hpp"
 #include "object.hpp"
 
+extern "C"
+{
 /**
  * @brief Creates a new function object.
  * 
@@ -28,6 +30,8 @@ void* new_function(char *name, void *outputs, void *inputs) {
  * @brief Pass along a group of equations to a function.
  */
 void evaluate_function_equations(void *function, void *equations) {
+
+}
 
 }
 
@@ -71,6 +75,10 @@ std::string function_t::evaluate() const {
     return "";
 }
 
+function_t::~function_t() {}
+
+extern "C"
+{
 /**
  * @brief Adds an equation to the list of equations.
  * 
@@ -114,7 +122,7 @@ void* make_equation(char *lhs_wire, char _op, char *rhs_wire) {
   equation_t *lhs_equation = new equation_t(rhs_equation, get_wire(lhs_wire), op);
   return (void*) lhs_equation;
 }
-
+}
 
 /**
  * @brief Constructor to initialize an operator object.
