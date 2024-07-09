@@ -4,6 +4,7 @@
 
 #include "exceptions.hpp"
 #include "object.hpp"
+#include "object.h"
 
 object_t* get_object(char *name) {
     return objects_db_t::get_objects_db()->lookup_object(name_t(name));
@@ -64,6 +65,52 @@ objects_db_t* objects_db_t::get_objects_db() {
     }
     return self;
 }
+
+/**
+ * @brief Creates a new context in the object database.
+ *
+ * This function pushes an empty unordered_map into the context stack.
+ */
+void objects_db_t::new_context() {
+     context_stack.push(std::unordered_map<name_t, object_t*>());
+}
+
+/**
+ * @brief Exits the current context in the object database.
+ *
+ * If the context stack is empty (i.e., no context to exit),
+ * a general_exception_t is thrown indicating inability to exit top level context.
+ *
+ * @throws general_exception_t If the context stack is empty.
+ */
+void objects_db_t::exit_context() {
+    if (context_stack.empty()) {
+      throw general_exception_t("Cannot exit top level context");
+    }
+    context_stack.pop();
+}
+
+extern "C"
+{
+/**
+ * @brief C function wrapper to call objects_db_t::new_context() externally.
+ *
+ * This function allows calling new_context() from C code.
+ */
+void new_context() {
+    objects_db_t::get_objects_db()->new_context();
+}
+
+/**
+ * @brief C function wrapper to call objects_db_t::exit_context() externally.
+ *
+ * This function allows calling exit_context() from C code.
+ */
+void exit_context() {
+    objects_db_t::get_objects_db()->exit_context();
+}
+}
+
 
 /**
  * @brief Constructor to initialize an object with a specified name.

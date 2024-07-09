@@ -1,5 +1,6 @@
 %{
 #include<stdio.h>
+#include "object.h"
 #include "types.h"
 #include "function.h"
 
@@ -17,6 +18,7 @@ void yyerror(const char *s);
 %type <equation> equation
 %type <equations> equations
 %type <wires> function_declaration_inputs
+%type <function> function_declaration
 %type <function> function
 
 %union {
@@ -30,14 +32,21 @@ void yyerror(const char *s);
 %%
 
 function
-    : declaration SYMBOL '(' function_declaration_inputs ')' '{' equations '}' {
+    : function_declaration '{' equations '}' {
+        evaluate_function_equations($1, $3);
+        printf("FUNCTION\n");
+        exit_context();
+    }
+    ;
+
+function_declaration
+    : declaration SYMBOL '(' function_declaration_inputs ')' {
+        new_context();
         void *function = new_function($2, $1, $4);
         free($2);
         free($1);
         free($4);
-        evaluate_function_equations(function, $7);
         $$ = function;
-        printf("FUNCTION\n");
     }
     ;
 

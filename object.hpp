@@ -6,6 +6,7 @@
 #define OBJECT_HPP
 
 #include <string>
+#include <stack>
 
 typedef std::string name_t;
 
@@ -27,12 +28,15 @@ class objects_db_t {
 private:
     std::unordered_map<name_t, object_t*> objects;
     static objects_db_t *self;
+    std::stack<std::unordered_map<name_t, object_t*>> context_stack;
 
     objects_db_t();
 public:
     void register_object(const name_t &name, object_t* const obj);
     object_t* lookup_object(const name_t &name) const;
     static objects_db_t* get_objects_db();
+    void new_context();
+    void exit_context();
 };
 
 /**
