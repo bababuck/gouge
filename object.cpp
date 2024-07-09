@@ -53,7 +53,7 @@ object_t* objects_db_t::lookup_object(const name_t &name) const {
 
 /**
  * @brief Retrieves the singleton instance of `objects_db_t`.
- * 
+ *
  * If the instance does not yet exist, it will be created on the first call.
  *
  * @return Pointer to the singleton instance of `objects_db_t`.

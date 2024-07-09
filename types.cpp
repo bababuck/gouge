@@ -61,7 +61,7 @@ void* new_wire(char *type, char *name) {
  * @brief Constructor for logic_t objects.
  *
  * Initializes a logic_t object with a specified name and bit width.
- * 
+ *
  * @param name The name of the logic_t object.
  * @param _bit_width The bit width of the logic_t object.
  * @todo: Check to make sure _bit_width < 64 (since we don't handle wider constants).
