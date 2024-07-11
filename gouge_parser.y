@@ -42,7 +42,8 @@ function
 function_declaration
     : declaration SYMBOL '(' function_declaration_inputs ')' {
         new_context();
-        void *function = new_function($2, $1, $4);
+        void *outputs = add_wires(NULL, $1);
+        void *function = new_function($2, outputs, $4);
         free($2);
         free($1);
         free($4);
