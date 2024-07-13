@@ -14,6 +14,8 @@ class object_t;
 
 object_t* get_object(char* name);
 
+void register_object(const name_t &name, object_t* const object);
+
 /**
  * @brief Singleton class using the Registry design pattern to manage a database of objects.
  *
