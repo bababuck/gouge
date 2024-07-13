@@ -32,7 +32,7 @@ objects_db_t* objects_db_t::self = nullptr;
 void objects_db_t::register_object(const name_t &name, object_t* const obj) {
     std::unordered_map<name_t, object_t*> &objects = context_stack.back();
     if (objects.find(name) != objects.end()) {
-        throw multiple_missing_def_exception_t(name + "already defined");
+        throw multiple_missing_def_exception_t(name + " already defined");
     }
     objects[name] = obj;
 }
@@ -53,7 +53,7 @@ object_t* objects_db_t::lookup_object(const name_t &name) const {
             return it->second;
         }
     }
-    throw multiple_missing_def_exception_t(name + "not yet defined");
+    throw multiple_missing_def_exception_t(name + " not yet defined");
 }
 
 /**
