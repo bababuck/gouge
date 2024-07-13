@@ -10,8 +10,8 @@ object_t* get_object(char *name) {
     return objects_db_t::get_objects_db()->lookup_object(name_t(name));
 }
 
-void register_object(const name_t &name, object_t * const object) {
-  return objects_db_t::get_objects_db()->register_object(name, object);
+void register_object(object_t * const object) {
+  return objects_db_t::get_objects_db()->register_object(object->name, object);
 }
 
 /**
