@@ -62,9 +62,11 @@ void wire_collection_t::add(wire_t *wire) {
 function_t::function_t(name_t _name, std::vector<wire_t*>* _outputs, std::vector<wire_t*>* _inputs) : object_t(_name) {
     for (auto wire : *_outputs) {
         outputs.add(wire);
+        register_object(wire);
     }
     for (auto wire : *_inputs) {
         inputs.add(wire);
+        register_object(wire);
     }
 }
 
