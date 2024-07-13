@@ -26,9 +26,8 @@ object_t* get_object(char* name);
  */
 class objects_db_t {
 private:
-    std::unordered_map<name_t, object_t*> objects;
     static objects_db_t *self;
-    std::stack<std::unordered_map<name_t, object_t*>> context_stack;
+    std::vector<std::unordered_map<name_t, object_t*>> context_stack;
 
     objects_db_t();
 public:

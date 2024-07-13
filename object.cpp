@@ -30,6 +30,7 @@ objects_db_t* objects_db_t::self = nullptr;
  * @param obj Pointer to the object to be registered.
  */
 void objects_db_t::register_object(const name_t &name, object_t* const obj) {
+    std::unordered_map<name_t, object_t*> &objects = context_stack.back();
     if (objects.find(name) != objects.end()) {
         throw multiple_missing_def_exception_t(name + "already defined");
     }
@@ -45,9 +46,12 @@ void objects_db_t::register_object(const name_t &name, object_t* const obj) {
  * @return Pointer to the object if found, nullptr otherwise.
  */
 object_t* objects_db_t::lookup_object(const name_t &name) const {
-    auto it = objects.find(name);
-    if (it != objects.end()) {
-        return it->second;
+    for (auto riter = context_stack.rbegin(); riter != context_stack.rend(); ++riter) {
+        auto objects = *riter;
+        auto it = objects.find(name);
+        if (it != objects.end()) {
+            return it->second;
+        }
     }
     throw multiple_missing_def_exception_t(name + "not yet defined");
 }
@@ -72,7 +76,7 @@ objects_db_t* objects_db_t::get_objects_db() {
  * This function pushes an empty unordered_map into the context stack.
  */
 void objects_db_t::new_context() {
-     context_stack.push(std::unordered_map<name_t, object_t*>());
+     context_stack.emplace_back(std::unordered_map<name_t, object_t*>());
 }
 
 /**
@@ -87,7 +91,7 @@ void objects_db_t::exit_context() {
     if (context_stack.empty()) {
       throw general_exception_t("Cannot exit top level context");
     }
-    context_stack.pop();
+    context_stack.pop_back();
 }
 
 extern "C"
