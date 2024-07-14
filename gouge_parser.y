@@ -58,10 +58,17 @@ function_declaration_inputs
 
 declaration
     : SYMBOL SYMBOL { $$ = new_wire($1, $2); }
+    ;
+
+wire_declaration
+    : declaration ';' { register_object($1);}
+    ;
 
 equations
     : equation { $$ = add_equation(NULL, &($1)); }
+    | wire_declaration { $$ = NULL; }
     | equations equation { $$ = add_equation($1, $2); }
+    | equations wire_declaration { $$ = $1; }
     ;
 
 equation

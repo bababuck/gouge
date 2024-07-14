@@ -13,6 +13,8 @@ void new_context();
 
 void exit_context();
 
+void register_object(void* const object);
+
 #ifdef __cplusplus
 }
 #endif

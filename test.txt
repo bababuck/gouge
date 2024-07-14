@@ -1,4 +1,5 @@
 wire mywire function(wire w1, wire w2) {
-    w1 = w2;
-    w3 = w4;
+    wire w3;
+    w3 = w2;
+    mywire = w1;
 }
