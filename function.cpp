@@ -30,7 +30,7 @@ void* new_function(char *name, void *outputs, void *inputs) {
  * @brief Pass along a group of equations to a function.
  */
 void evaluate_function_equations(void *function, void *equations) {
-
+  ((function_t*) function)->equations = (std::vector<equation_t*>*) equations;
 }
 
 }

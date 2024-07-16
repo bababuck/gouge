@@ -27,6 +27,8 @@ public:
     void add(wire_t *wire);
 };
 
+class equation_t;
+
 /**
  * @brief Represents a function object inheriting from an abstract object type.
  * 
@@ -40,6 +42,8 @@ class function_t : public object_t {
   function_t(name_t _name, std::vector<wire_t*> *_outputs, std::vector<wire_t*> *_inputs);
   std::string evaluate() const;
   virtual ~function_t() override;
+ public:
+  std::vector<equation_t*> *equations;
 };
 
 /**
