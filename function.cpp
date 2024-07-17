@@ -72,6 +72,10 @@ function_t::function_t(name_t _name, std::vector<wire_t*>* _outputs, std::vector
 
 /**
  * @brief Return verilog code for the performing the function.
+ *
+ * Looking equation by equation, add equation as driver to wire (need to remember for if)
+ * print out each equation as assign
+ *
  */
 std::string function_t::evaluate() const {
     return "";

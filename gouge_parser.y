@@ -9,7 +9,7 @@ void yyerror(const char *s);
 
 %}
 
-%token SYMBOL ASSIGN
+%token SYMBOL ASSIGN IF
 
 %start function
 

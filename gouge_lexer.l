@@ -17,6 +17,7 @@ WS  [ \t\v\n\f]
 ";"                          { return ';'; }
 "{"                          { return '{'; }
 "}"                          { return '}'; }
+"if"                         { return IF; }
 
 {L}{A}*                      { yylval.str=strdup(yytext); return SYMBOL; }
 
