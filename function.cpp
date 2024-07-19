@@ -82,9 +82,11 @@ function_t::function_t(name_t _name, std::vector<wire_t*>* _outputs, std::vector
  *
  */
 std::string function_t::evaluate() const {
+  std::stringstream ss;
   for (auto equation : *equations)
-    std::cout << equation->evaluate() <<std::endl;
-  return "";
+    ss << equation->evaluate() << "\n";
+  std::cout << ss.str() << std::endl;
+  return ss.str();
 }
 
 function_t::~function_t() {}
