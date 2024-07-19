@@ -55,7 +55,7 @@ class function_t : public object_t {
  * @todo: Make this use the flyweight design pattern
  */
 class operator_t {
-private:
+public:
   char op;
 public:
   operator_t(char _op);
@@ -76,6 +76,7 @@ private:
   operator_t *op;
 public:
   equation_t(equation_t *_next, wire_t *_wire, operator_t *_op);
+  std::string evaluate() const;
 };
 
 #endif

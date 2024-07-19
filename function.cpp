@@ -6,6 +6,9 @@
 #include "function.hpp"
 #include "object.hpp"
 
+#include <iostream>
+#include <sstream>
+
 extern "C"
 {
 /**
@@ -31,6 +34,7 @@ void* new_function(char *name, void *outputs, void *inputs) {
  */
 void evaluate_function_equations(void *function, void *equations) {
   ((function_t*) function)->equations = (std::vector<equation_t*>*) equations;
+  ((function_t*) function)->evaluate();
 }
 
 }
@@ -78,7 +82,9 @@ function_t::function_t(name_t _name, std::vector<wire_t*>* _outputs, std::vector
  *
  */
 std::string function_t::evaluate() const {
-    return "";
+  for (auto equation : *equations)
+    std::cout << equation->evaluate() <<std::endl;
+  return "";
 }
 
 function_t::~function_t() {}
@@ -146,3 +152,23 @@ operator_t::operator_t(char _op): op(_op) {}
   * @param _op Pointer to the operator associated with this equation.
   */
 equation_t::equation_t(equation_t *_next, wire_t *_wire, operator_t *_op): next(_next), wire(_wire), op(_op){}
+
+/**
+ * @brief Evaluates the equation to a string.
+ *
+ * This method constructs the string representation of the equation by combining
+ * the name of the wire, the operator, and the result of the next equation.
+ *
+ * @return The string representation of the equation.
+ */
+std::string equation_t::evaluate() const {
+  std::stringstream ss;
+  ss << wire->name;
+  if (next) {
+    ss << " " << op->op << " " << next->evaluate();
+  } else {
+    ss << ";";
+  }
+
+  return ss.str();
+}
