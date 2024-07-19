@@ -9,6 +9,8 @@
 #include <iostream>
 #include <sstream>
 
+#define INDENT "    "
+
 extern "C"
 {
 /**
@@ -81,10 +83,18 @@ function_t::function_t(name_t _name, std::vector<wire_t*>* _outputs, std::vector
  */
 std::string function_t::evaluate() const {
   std::stringstream ss;
+  ss << "function " << name << ";\n";
+  for (wire_t* input : (*inputs)) {
+    ss << INDENT << "input " << input->name << ";\n";
+  }
+  (*outputs)[0]->name = name;
+  ss << INDENT << "begin\n";
   for (auto equation : *equations)
-    ss << equation->evaluate() << "\n";
+    ss << INDENT << INDENT << equation->evaluate() << "\n";
+  ss << INDENT << "end\n";
+  ss << "endfunction\n";
   std::cout << ss.str() << std::endl;
-  return ss.str();
+ return ss.str();
 }
 
 function_t::~function_t() {}
