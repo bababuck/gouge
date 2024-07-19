@@ -36,8 +36,8 @@ class equation_t;
  */
 class function_t : public object_t {
  private:
-  wire_collection_t inputs;
-  wire_collection_t  outputs;
+  std::vector<wire_t*> *inputs;
+  std::vector<wire_t*> *outputs;
  public:
   function_t(name_t _name, std::vector<wire_t*> *_outputs, std::vector<wire_t*> *_inputs);
   std::string evaluate() const;
