@@ -31,7 +31,7 @@ class equation_t;
 
 /**
  * @brief Represents a function object inheriting from an abstract object type.
- * 
+ *
  * This class manages inputs, outputs, and intermediate variables for a function.
  */
 class function_t : public object_t {
@@ -48,7 +48,7 @@ class function_t : public object_t {
 
 /**
  * @brief Represents an operator object for equations.
- * 
+ *
  * This class encapsulates an operator used in equations. It allows connecting
  * left-hand side (lhs) and right-hand side (rhs) operands into a string representation.
  *
