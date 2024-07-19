@@ -21,7 +21,7 @@ void evaluate_function_equations(void *function, void *equations);
  * @todo Condense this down to use data from `objects_db_t`.
  */
 class wire_collection_t {
-private:
+public:
     std::unordered_map<name_t, wire_t*> wires;
 public:
     void add(wire_t *wire);
