@@ -23,3 +23,9 @@ const char* general_exception_t::what() const noexcept {
  * @param msg The error message to be associated with the exception.
  */
 multiple_missing_def_exception_t::multiple_missing_def_exception_t(const std::string& msg) : general_exception_t(msg) {}
+
+/**
+ * @brief Constructor for initializing the exception with a message.
+ * @param msg The error message to be associated with the exception.
+ */
+illegal_driver_exception_t::illegal_driver_exception_t(const std::string& msg) : general_exception_t(msg) {}

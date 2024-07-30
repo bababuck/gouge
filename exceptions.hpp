@@ -31,4 +31,14 @@ class multiple_missing_def_exception_t : public general_exception_t {
 public:
     multiple_missing_def_exception_t(const std::string& msg);
 };
+
+/**
+ * @brief Exception class for indicating illegally driver wires.
+ *
+ * Cannot doubly drive wires, and certain logic_t subclasses cannot be driven.
+ */
+class illegal_driver_exception_t : public general_exception_t {
+public:
+    illegal_driver_exception_t(const std::string& msg);
+};
 #endif

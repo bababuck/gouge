@@ -80,4 +80,11 @@ void wire_t::check_multiple_drivers() const {}
 
 void reg_t::increment_cycle() const {}
 
-void constant_t::add_driver(equation_t *driver) {} // throw exeption
+/**
+ * @brief Add a driving equation.
+ *
+ * Throws an exception since a constant can't be drive (doesn't make sense).
+ */
+void constant_t::add_driver(equation_t *driver) {
+  throw illegal_driver_exception_t("Cannot drive a constant.");
+}
