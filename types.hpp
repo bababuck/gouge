@@ -35,7 +35,7 @@ protected:
  * @brief Represents a wire in the logic system.
  */
 class wire_t : public logic_t {
-private:
+public:
     equation_t *driver;
 public:
     wire_t(char *name, width_t _bit_width);
