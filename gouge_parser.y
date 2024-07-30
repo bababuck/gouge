@@ -44,7 +44,6 @@ function_declaration
         new_context();
         void *outputs = add_wires(NULL, $1);
         void *function = new_function($2, outputs, $4);
-        free($1);
         $$ = function;
     }
     ;
