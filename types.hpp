@@ -36,7 +36,7 @@ protected:
  */
 class wire_t : public logic_t {
 private:
-    logic_t **drivers;
+    equation_t *driver;
 public:
     wire_t(char *name, width_t _bit_width);
 private:
