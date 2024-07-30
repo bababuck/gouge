@@ -73,7 +73,7 @@ logic_t::~logic_t(){}
 void logic_t::add_driver(equation_t *driver) {}
 
 wire_t::wire_t(char *name, width_t _bit_width):logic_t(name, _bit_width){}
-void wire_t::add_driver() {}
+void wire_t::add_driver(equation_t *driver) {}
 void wire_t::validate() const {}
 void wire_t::increment_cycle() const {}
 void wire_t::check_multiple_drivers() const {}

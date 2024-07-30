@@ -7,11 +7,13 @@
 
 #include <string>
 
+#include "equation.hpp"
 #include "object.hpp"
 
 typedef size_t width_t;
 
 class wire_t;
+class equation_t;
 
 wire_t* get_wire(const char* name);
 
