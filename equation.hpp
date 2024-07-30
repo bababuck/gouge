@@ -11,6 +11,8 @@
 #include "object.hpp"
 #include "types.hpp"
 
+class wire_t;
+
 /**
  * @brief Represents an operator object for equations.
  *
