@@ -146,8 +146,10 @@ void* add_equation(void *old_equations, void *equation) {
  */
 void* make_equation(char *lhs_wire, char _op, char *rhs_wire) {
   operator_t *op = new operator_t(_op);
-  equation_t *rhs_equation = new equation_t(nullptr, get_wire(rhs_wire), nullptr);
-  equation_t *lhs_equation = new equation_t(rhs_equation, get_wire(lhs_wire), op);
+  wire_t *rhs = get_wire(rhs_wire);
+  wire_t *lhs = get_wire(lhs_wire);
+  equation_t *rhs_equation = new equation_t(nullptr, rhs, nullptr);
+  equation_t *lhs_equation = new equation_t(rhs_equation, lhs, op);
   return (void*) lhs_equation;
 }
 }
