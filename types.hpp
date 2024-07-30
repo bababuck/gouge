@@ -24,7 +24,7 @@ private:
     width_t bit_width;
 public:
     logic_t(char *name, width_t _bit_width);
-    virtual void add_driver();
+    virtual void add_driver(equation_t *driver);
 protected:
     virtual ~logic_t() = 0;
 };
@@ -42,7 +42,7 @@ private:
     void check_multiple_drivers() const;
     virtual void increment_cycle() const; // Does nothing except for register type
 public:
-    virtual void add_driver() override;
+    virtual void add_driver(equation_t *driver) override;
 };
 
 /**
@@ -60,7 +60,7 @@ public:
  */
 class constant_t : public logic_t {
 public:
-    virtual void add_driver() override;
+    virtual void add_driver(equation_t *driver) override;
 };
 
 #endif

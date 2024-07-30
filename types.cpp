@@ -70,7 +70,7 @@ logic_t::logic_t(char *name, width_t _bit_width): object_t(name_t(name)), bit_wi
 
 logic_t::~logic_t(){}
 
-void logic_t::add_driver() {}
+void logic_t::add_driver(equation_t *driver) {}
 
 wire_t::wire_t(char *name, width_t _bit_width):logic_t(name, _bit_width){}
 void wire_t::add_driver() {}
@@ -80,4 +80,4 @@ void wire_t::check_multiple_drivers() const {}
 
 void reg_t::increment_cycle() const {}
 
-void constant_t::add_driver() {} // throw exeption
+void constant_t::add_driver(equation_t *driver) {} // throw exeption
