@@ -98,5 +98,5 @@ void reg_t::increment_cycle() const {}
  * Throws an exception since a constant can't be drive (doesn't make sense).
  */
 void constant_t::add_driver(equation_t *driver) {
-  throw illegal_driver_exception_t("Cannot drive a constant.");
+  throw illegal_driver_exception_t("Cannot drive a constant: " + name);
 }
