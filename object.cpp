@@ -6,7 +6,7 @@
 #include "object.hpp"
 #include "object.h"
 
-object_t* get_object(char *name) {
+object_t* get_object(const char *name) {
     return objects_db_t::get_objects_db()->lookup_object(name_t(name));
 }
 

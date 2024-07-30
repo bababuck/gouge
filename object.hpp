@@ -12,7 +12,7 @@ typedef std::string name_t;
 
 class object_t;
 
-object_t* get_object(char* name);
+object_t* get_object(const char* name);
 
 void register_object(object_t* const object);
 
