@@ -70,10 +70,20 @@ logic_t::logic_t(char *name, width_t _bit_width): object_t(name_t(name)), bit_wi
 
 logic_t::~logic_t(){}
 
-wire_t::wire_t(char *name, width_t _bit_width):logic_t(name, _bit_width){}
+wire_t::wire_t(char *name, width_t _bit_width):logic_t(name, _bit_width), driver(nullptr){}
 
-void wire_t::add_driver(equation_t *driver) {
-
+/**
+ * @brief Add a driving equation.
+ *
+ * Save the driving equation as part of the class.
+ *
+ * @todo Doubly driven wires need support.
+ */
+void wire_t::add_driver(equation_t *new_driver) {
+  if (driver) {
+    throw illegal_driver_exception_t("Cannot doubly drive a wire: " + name);
+  }
+  driver = new_driver;
 }
 
 void wire_t::validate() const {}
