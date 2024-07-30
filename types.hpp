@@ -41,6 +41,7 @@ private:
     virtual void validate() const; // Check to make sure all drivers are compatible
     void check_multiple_drivers() const;
     virtual void increment_cycle() const; // Does nothing except for register type
+public:
     virtual void add_driver() override;
 };
 
