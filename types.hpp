@@ -26,7 +26,7 @@ private:
     width_t bit_width;
 public:
     logic_t(char *name, width_t _bit_width);
-    virtual void add_driver(equation_t *driver);
+    virtual void add_driver(equation_t *driver)=0;
 protected:
     virtual ~logic_t() = 0;
 };
