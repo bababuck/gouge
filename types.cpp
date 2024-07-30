@@ -9,7 +9,7 @@
 #include "types.h"
 #include "types.hpp"
 
-wire_t* get_wire(char *name) {
+wire_t* get_wire(const char *name) {
     object_t *object = get_object(name);
     wire_t *wire = dynamic_cast<wire_t*>(object);
     if (wire) {

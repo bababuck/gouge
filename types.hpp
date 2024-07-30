@@ -13,7 +13,7 @@ typedef size_t width_t;
 
 class wire_t;
 
-wire_t* get_wire(char* name);
+wire_t* get_wire(const char* name);
 
 /**
  * @brief Represents a logic entity with drivers and receivers.
