@@ -39,6 +39,9 @@ void evaluate_function_equations(void *_function, void *_equations) {
   function_t *function = (function_t*) _function;
   std::vector<equation_t*>* equations = (std::vector<equation_t*>*) _equations;
   function->equations = equations;
+  for (auto equation : *equations) {
+    get_wire(equation->wire->name.c_str())->add_driver(equation->next); // Current if/then status
+  }
   function->evaluate();
 }
 
