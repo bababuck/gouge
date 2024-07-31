@@ -13,6 +13,7 @@
 
 typedef struct {
   std::vector<equation_t*> equations;
+  std::vector<wire_t*> declarations;
 } equations_t;
 
 void* new_function(char *name, void **outputs, void **inputs);
