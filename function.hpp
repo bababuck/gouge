@@ -11,6 +11,8 @@
 #include "object.hpp"
 #include "types.hpp"
 
+typedef std::vector<equation_t*> equations_t;
+
 void* new_function(char *name, void **outputs, void **inputs);
 
 void evaluate_function_equations(void *function, void *equations);

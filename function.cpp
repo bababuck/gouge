@@ -122,9 +122,9 @@ extern "C"
  * @note If `old_equations` is `nullptr`, a new std::vector<equation_t*> is allocated.
  */
 void* add_equation(void *old_equations, void *equation) {
-  std::vector<equation_t*> *equations = (std::vector<equation_t*>*) old_equations;
+  equations_t *equations = (equations_t*) old_equations;
   if (!equations) {
-    equations = new std::vector<equation_t*>();
+    equations = new equations_t();
   }
   equations->emplace_back((equation_t*) equation);
   return (void*) equations;
