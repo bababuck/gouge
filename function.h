@@ -15,6 +15,8 @@ void evaluate_function_equations(void *function, void *equations);
 
 void* add_equation(void *old_equations, void *equation);
 
+void* add_declaration(void *old_equations, void *declaration);
+
 void* make_equation(char *lhs_wire, char op, char *rhs_wire);
 
 #ifdef __cplusplus

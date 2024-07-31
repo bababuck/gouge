@@ -17,6 +17,7 @@ void yyerror(const char *s);
 %type <str> SYMBOL
 %type <equation> equation
 %type <equations> equations
+%type <wire> wire_declaration
 %type <wires> function_declaration_inputs
 %type <function> function_declaration
 %type <function> function
@@ -58,14 +59,14 @@ declaration
     ;
 
 wire_declaration
-    : declaration ';' { register_object($1);}
+    : declaration ';' { register_object($1); $$ = $1; }
     ;
 
 equations
     : equation { $$ = add_equation(NULL, &($1)); }
-    | wire_declaration { $$ = NULL; }
+    | wire_declaration { $$ = add_declaration(NULL, $1); }
     | equations equation { $$ = add_equation($1, $2); }
-    | equations wire_declaration { $$ = $1; }
+    | equations wire_declaration { $$ = add_declaration($1, $2); }
     ;
 
 equation

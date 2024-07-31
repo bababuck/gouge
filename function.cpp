@@ -131,6 +131,20 @@ void* add_equation(void *old_equations, void *equation) {
 }
 
 /**
+ * @brief Adds a declaration to the list of equations.
+ *
+ * This function adds a new declaration to an existing list of declarations.
+ *
+ * @param old_equations Pointer to the old list of equations.
+ * @param declaration Pointer to the declaration to add.
+ *
+ * @return Pointer to the updated list of equations (equations_t*).
+ */
+void* add_declaration(void *old_equations, void *declaration) {
+  return old_equations;
+}
+
+/**
  * @brief Creates an equation using given operands and operator.
  *
  * This function creates an equation using the provided left-hand side wire,
