@@ -39,8 +39,8 @@ void* new_function(char *name, void *outputs, void *inputs) {
 void evaluate_function_equations(void *_function, void *_equations) {
   function_t *function = (function_t*) _function;
   equations_t* equations = (equations_t*) _equations;
-  function->equations = equations;
-  for (auto equation : *equations) {
+  function->equations = &(equations->equations);
+  for (auto equation : equations->equations) {
     get_wire(equation->wire->name.c_str())->add_driver(equation->next); // Current if/then status
   }
   function->evaluate();
@@ -126,7 +126,7 @@ void* add_equation(void *old_equations, void *equation) {
   if (!equations) {
     equations = new equations_t();
   }
-  equations->emplace_back((equation_t*) equation);
+  equations->equations.emplace_back((equation_t*) equation);
   return (void*) equations;
 }
 
