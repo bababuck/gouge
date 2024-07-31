@@ -40,6 +40,10 @@ void evaluate_function_equations(void *_function, void *_equations) {
   function_t *function = (function_t*) _function;
   equations_t* equations = (equations_t*) _equations;
   function->equations = &(equations->equations);
+  function->wires = &(equations->declarations);
+  for (auto wire : *(function->outputs)) {
+    function->wires->emplace_back(wire);
+  }
   for (auto equation : equations->equations) {
     get_wire(equation->wire->name.c_str())->add_driver(equation->next); // Current if/then status
   }

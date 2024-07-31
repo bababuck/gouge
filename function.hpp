@@ -47,6 +47,7 @@ class function_t : public object_t {
   virtual ~function_t() override;
  public:
   std::vector<equation_t*> *equations;
+  std::vector<wire_t*> *wires;
 };
 
 #endif
