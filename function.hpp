@@ -40,6 +40,7 @@ public:
 class function_t : public object_t {
  private:
   std::vector<wire_t*> *inputs;
+ public:
   std::vector<wire_t*> *outputs;
  public:
   function_t(name_t _name, std::vector<wire_t*> *_outputs, std::vector<wire_t*> *_inputs);
