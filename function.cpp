@@ -139,9 +139,16 @@ void* add_equation(void *old_equations, void *equation) {
  * @param declaration Pointer to the declaration to add.
  *
  * @return Pointer to the updated list of equations (equations_t*).
+ *
+ * @note If `old_equations` is `nullptr`, a new equations_t is allocated.
  */
 void* add_declaration(void *old_equations, void *declaration) {
-  return old_equations;
+  equations_t *equations = (equations_t*) old_equations;
+  if (!equations) {
+    equations = new equations_t();
+  }
+  equations->declarations.emplace_back((wire_t*) declaration);
+  return (void*) equations;
 }
 
 /**
