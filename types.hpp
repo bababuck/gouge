@@ -54,7 +54,7 @@ public:
  */
 class reg_t : public wire_t {
 public:
-    virtual void increment_cycle() const; // Print out always block
+    virtual void increment_cycle() const override; // Print out always block
     virtual bool is_driven() override;
 };
 
