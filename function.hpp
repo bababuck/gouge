@@ -38,6 +38,8 @@ public:
  * This class manages inputs, outputs, and intermediate variables for a function.
  */
 class function_t : public object_t {
+  static equation_t fake_driver;
+
  private:
   std::vector<wire_t*> *inputs;
  public:
@@ -50,5 +52,7 @@ class function_t : public object_t {
   std::vector<equation_t*> *equations;
   std::vector<wire_t*> *wires;
 };
+
+equation_t function_t::fake_driver(NULL, NULL, NULL);
 
 #endif

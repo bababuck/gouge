@@ -82,6 +82,7 @@ function_t::function_t(name_t _name, std::vector<wire_t*>* _outputs, std::vector
     }
     for (auto wire : *_inputs) {
         register_object(wire);
+        wire->add_driver(&function_t::fake_driver);
     }
 }
 
