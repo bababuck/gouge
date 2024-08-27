@@ -27,6 +27,7 @@ private:
 public:
     logic_t(char *name, width_t _bit_width);
     virtual void add_driver(equation_t *driver)=0;
+    virtual bool is_driven() = 0;
 protected:
     virtual ~logic_t() = 0;
 };
@@ -45,6 +46,7 @@ private:
     virtual void increment_cycle() const; // Does nothing except for register type
 public:
     virtual void add_driver(equation_t *driver) override;
+    virtual bool is_driven() override;
 };
 
 /**
@@ -53,6 +55,7 @@ public:
 class reg_t : public wire_t {
 public:
     virtual void increment_cycle() const; // Print out always block
+    virtual bool is_driven() override;
 };
 
 /**
@@ -63,6 +66,7 @@ public:
 class constant_t : public logic_t {
 public:
     virtual void add_driver(equation_t *driver) override;
+    virtual bool is_driven() override;
 };
 
 #endif

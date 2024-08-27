@@ -173,7 +173,7 @@ void* add_declaration(void *old_equations, void *declaration) {
 void* make_equation(char *lhs_wire, char _op, char *rhs_wire) {
   operator_t *op = new operator_t(_op);
   wire_t *rhs = get_wire(rhs_wire);
-  if (!rhs->driver) {
+  if (!rhs->is_driven()) {
     throw illegal_driver_exception_t("Cannot use wire in equation that has not yet been driven: " + rhs->name);
   }
   wire_t *lhs = get_wire(lhs_wire);

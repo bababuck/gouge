@@ -86,12 +86,18 @@ void wire_t::add_driver(equation_t *new_driver) {
   driver = new_driver;
 }
 
+bool wire_t::is_driven() {
+  return driver;
+}
+
 void wire_t::validate() const {}
 void wire_t::increment_cycle() const {}
 void wire_t::check_multiple_drivers() const {}
 
 void reg_t::increment_cycle() const {}
-
+bool reg_t::is_driven() {
+  return false;
+}
 /**
  * @brief Add a driving equation.
  *
@@ -99,4 +105,8 @@ void reg_t::increment_cycle() const {}
  */
 void constant_t::add_driver(equation_t *driver) {
   throw illegal_driver_exception_t("Cannot drive a constant: " + name);
+}
+
+bool constant_t::is_driven() {
+  return true;
 }
